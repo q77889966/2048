@@ -1,5 +1,27 @@
 #include<stdio.h>
 #include<windows.h>
-int main() {
+#define	GREEN	FOREGROUND_GREEN	//2 Ç°¾°ÉîÂÌ 0x02
+#define	CYAN		FOREGROUND_GREEN|FOREGROUND_BLUE	//3 Ç°¾°Çà
+#define	RED		FOREGROUND_RED	//4 Ç°¾°ºì
+#define	MAGENTA	FOREGROUND_RED|FOREGROUND_BLUE	//5 Ç°¾°Ñóºì
+#define	YELLOW	FOREGROUND_RED|FOREGROUND_GREEN	//6 Ç°¾°»Æ
+#define	WHITE	FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE	//7 Ç°¾°°×
+#define	BRIGHT_BLUE		FOREGROUND_INTENSITY|FOREGROUND_BLUE	//9 Ç°¾°ÁÁÀ¶
+#define	BRIGHT_GREEN		FOREGROUND_INTENSITY|FOREGROUND_GREEN	//10 Ç°¾°ÁÁÂÌ
+#define	BRIGHT_CYAN		FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_BLUE	//11 Ç°¾°ÁÁÇà
+#define	BRIGHT_RED		FOREGROUND_INTENSITY|FOREGROUND_RED	//12 Ç°¾°ÁÁºì
+#define	BRIGHT_MAGENTA	FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_BLUE	//13 Ç°¾°ÁÁÑóºì
+#define	BRIGHT_YELLOW		FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN	//14 Ç°¾°ÁÁ»Æ
+#define	BRIGHT_WHITE FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE //15 Ç°¾°ÁÁ°×
+void PrtTitle() {          //´òÓ¡2048
+    COORD pos = { 17,2 };
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(hOut, pos);
+    SetConsoleTextAttribute(hOut, BRIGHT_CYAN);
+    printf("¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö\n");
 
+}
+int main() {
+    PrtTitle();
+    return 0;
 }
