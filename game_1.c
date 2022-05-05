@@ -222,7 +222,7 @@ void Rules() {                //打印游戏规则
 	main();
 }
 
-void PrtGameBox() {
+void PrtGameBox() {                 //打印4 * 4游戏棋盘框线以及游戏固定信息
 	COORD pos_3 = { 13,3 };
 	COORD pos_4 = { 13,4 };
 	COORD pos_5 = { 13,5 };
@@ -306,7 +306,6 @@ void Game_Start() {
 	PrtGameBox();
 
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-
 
 	time_start = time(NULL);
 
