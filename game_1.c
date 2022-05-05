@@ -1,6 +1,7 @@
 ﻿#include<stdio.h>
 #include<windows.h>
 #include <conio.h>
+#include<time.h>
 #define	GREEN	FOREGROUND_GREEN	//2 前景深绿 0x02
 #define	CYAN		FOREGROUND_GREEN|FOREGROUND_BLUE	//3 前景青
 #define	RED		FOREGROUND_RED	//4 前景红
@@ -57,9 +58,11 @@ char PrtWelcom(int flag) {
 	COORD pos_12 = { 13,20 };
 	COORD pos_13 = { 23,12 };
 	COORD pos_14 = { 23,17 };
+
 	COORD final = { 20,22 };
 	COORD final_1 = { 37,22 };
 	COORD final_2 = { 47,22 };
+
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hOut, pos_1);
 	SetConsoleTextAttribute(hOut, BRIGHT_YELLOW);
@@ -154,6 +157,7 @@ void Rules() {                //打印游戏规则
 	COORD pos_18 = { 15,12 };
 	COORD pos_19 = { 15,14 };
 	COORD pos_20 = { 15,16 };
+
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hOut, BRIGHT_MAGENTA);
 	SetConsoleCursorPosition(hOut, pos_1);
@@ -212,14 +216,135 @@ void Rules() {                //打印游戏规则
 
 
 	Hidecursor();
+	fflush(stdin);
 	getch();
+	system("cls");
+	main();
+}
+
+void PrtGameBox() {
+	COORD pos_3 = { 13,3 };
+	COORD pos_4 = { 13,4 };
+	COORD pos_5 = { 13,5 };
+	COORD pos_6 = { 13,6 };
+	COORD pos_7 = { 13,7 };
+	COORD pos_8 = { 13,8 };
+	COORD pos_9 = { 13,9 };
+	COORD pos_10 = { 13,10 };
+	COORD pos_11 = { 13,11 };
+	COORD pos_12 = { 13,12 };
+	COORD pos_13 = { 13,13 };
+	COORD pos_14 = { 13,14 };
+	COORD pos_15 = { 13,15 };
+	COORD pos_16 = { 13,16 };
+	COORD pos_17 = { 13,17 };
+	COORD pos_18 = { 13,18 };
+	COORD pos_19 = { 13,19 };
+	COORD pos_20 = { 13,20 };
+	COORD pos_21 = { 13,21 };
+	COORD pos_22 = { 13,22 };
+	COORD pos_23 = { 13,23 };
+
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	SetConsoleTextAttribute(hOut, BRIGHT_YELLOW);
+	SetConsoleCursorPosition(hOut, pos_3);
+	printf("-----------------------------------------");
+	SetConsoleCursorPosition(hOut, pos_4);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_5);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_6);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_7);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_8);
+	printf("-----------------------------------------");
+	SetConsoleCursorPosition(hOut, pos_9);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_10);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_11);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_12);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_13);
+	printf("-----------------------------------------");
+	SetConsoleCursorPosition(hOut, pos_14);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_15);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_16);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_17);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_18);
+	printf("-----------------------------------------");
+	SetConsoleCursorPosition(hOut, pos_19);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_20);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_21);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_22);
+	printf("|         |         |         |         |");
+	SetConsoleCursorPosition(hOut, pos_23);
+	printf("-----------------------------------------");
 }
 
 void Game_Start() {
+	long int count = 0, score = 0, start = 0;//已执行步数 存储游戏分数 游戏开始时间
+	time_t time_start, time_now;
+	char c;
+	int BOX[4][4] = { {0},{0},{0},{0} };//游戏棋盘状态数组
+	system("cls");
+
+	COORD pos_1 = { 14,2 };
+	COORD pos_2 = { 40,2 };
+	COORD pos_24 = { 40,24 };
+
+	PrtGameBox();
+
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+
+	time_start = time(NULL);
+
+	while (1) {
+		SetConsoleTextAttribute(hOut, BRIGHT_CYAN);
+		SetConsoleCursorPosition(hOut, pos_1);
+		printf("游戏分数: %ld", score);
+
+		SetConsoleTextAttribute(hOut, BRIGHT_MAGENTA);
+		SetConsoleCursorPosition(hOut, pos_2);
+		printf("执行步数: %ld", count);
+
+		SetConsoleTextAttribute(hOut, GREEN);
+		SetConsoleCursorPosition(hOut, pos_24);
+		printf("已用时： %ld", start);
+
+		count++;
+
+		Hidecursor();
+		fflush(stdin);
+
+
+		time_now = time(NULL);
+		start = time_now - time_start;
+
+		while (1) {
+			c = getch();
+			if (c == 80) {
+
+			}
+		}
+	}
 	//printf("111");
 }
 
 int main() {
+	fflush(stdin);
+	SetConsoleTitle("2 0 4 8 游 戏");
 	int flag = 0;
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	PrtTitle();             //打印2048
