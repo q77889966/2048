@@ -13,14 +13,32 @@
 #define	BRIGHT_MAGENTA	FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_BLUE	//13 前景亮洋红
 #define	BRIGHT_YELLOW		FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN	//14 前景亮黄
 #define	BRIGHT_WHITE FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE //15 前景亮白
-void PrtTitle() {          //打印2048
+void PrtTitle() {                    //打印2048
 	COORD pos = { 17,2 };
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hOut, pos);
 	SetConsoleTextAttribute(hOut, BRIGHT_CYAN);
-	printf("■■■\n");
+	printf("■■■   ■■■■   ■  ■     ■■■■");
+	COORD pos_1 = { 17,3 };
+	SetConsoleCursorPosition(hOut, pos_1);
+	printf("    ■   ■    ■   ■  ■     ■    ■");
+	COORD pos_2 = { 17,4 };
+	SetConsoleCursorPosition(hOut, pos_2);
+	printf("■■■   ■    ■   ■  ■     ■■■■");
+	COORD pos_3 = { 17,5 };
+	SetConsoleCursorPosition(hOut, pos_3);
+	printf("■       ■    ■   ■■■■   ■    ■");
+	COORD pos_4 = { 17,6 };
+	SetConsoleCursorPosition(hOut, pos_4);
+	printf("■■■   ■■■■       ■     ■■■■");
+}
+
+char PrtWelcom() {
+
 }
 int main() {
-	PrtTitle();
+
+	PrtTitle();             //打印2048
+	char c = PrtWelcom();     //打印主界面，返回值为键盘输入
 	return 0;
 }
