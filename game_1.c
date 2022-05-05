@@ -1,4 +1,4 @@
-#include<stdio.h>
+﻿#include<stdio.h>
 #include<windows.h>
 #define	GREEN	FOREGROUND_GREEN	//2 前景深绿 0x02
 #define	CYAN		FOREGROUND_GREEN|FOREGROUND_BLUE	//3 前景青
