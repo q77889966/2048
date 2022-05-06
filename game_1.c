@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <time.h>
 #include <stdlib.h>
+#include<stdbool.h>
 #define	GREEN	FOREGROUND_GREEN	//2 前景深绿 0x02
 #define	CYAN		FOREGROUND_GREEN|FOREGROUND_BLUE	//3 前景青
 #define	RED		FOREGROUND_RED	//4 前景红
@@ -21,7 +22,7 @@
 
 int BOX[4][4] = { {0},{0},{0},{0} };//游戏棋盘状态数组
 long int count = 0, score = 0, start = 0;//已执行步数 存储游戏分数 游戏开始时间
-
+bool flag = 1;
 void Hidecursor()
 {
 	CONSOLE_CURSOR_INFO CURSOR_INFO = { 1,0 };
@@ -47,7 +48,7 @@ void PrtTitle() {                    //打印2048
 	printf("■■■   ■■■■       ■     ■■■■");
 }
 
-char PrtWelcom(int flag) {
+char PrtWelcom(int sym) {
 
 	COORD pos_1 = { 13,9 };
 	COORD pos_2 = { 13,10 };
@@ -102,7 +103,7 @@ char PrtWelcom(int flag) {
 	SetConsoleCursorPosition(hOut, final);
 	SetConsoleTextAttribute(hOut, CYAN);
 
-	if (flag == 0) {
+	if (sym == 0) {
 		printf("请选择[1 2 3 4]:[ ]");
 		SetConsoleCursorPosition(hOut, final_1);
 	}
@@ -450,6 +451,16 @@ void PrtNumC(int num, int x, int y) {//打印数字
 	}
 }
 
+int Count() {
+	int i, j, amount = 0;
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 4; j++)
+			if (BOX[i][j] != 0)
+				amount++;
+	}
+	return amount;
+}
+
 void random() {          //随机数生成
 	srand((unsigned)time(NULL));
 	int i, j, num;
@@ -462,6 +473,8 @@ void random() {          //随机数生成
 			BOX[i][j] = a[num];
 			break;
 		}
+		else if (Count() == 16)
+			break;
 	}
 }
 
@@ -477,13 +490,13 @@ void left()
 				{
 					score += BOX[i][k++] <<= 1;
 					BOX[i][j] = 0;
-					//if_need_add_num = 1; /* 需要⽣成随机数和刷新界⾯ */
+					flag = 1; /* 需要⽣成随机数和刷新界⾯ */
 				}
 				else if (BOX[i][k] == 0) /* 情况2：k项为空，则把j项赋值给k项，相当于j⽅块移动到k⽅块 */
 				{
 					BOX[i][k] = BOX[i][j];
 					BOX[i][j] = 0;
-					//if_need_add_num = 1;
+					flag = 1;
 				}
 				else /* 情况3：k项不为空，且和j项不相等，此时把j项赋值给k+1项，相当于移动到k+1的位置 */
 				{
@@ -491,7 +504,7 @@ void left()
 					if (j != k) /* 判断j项和k项是否原先就挨在⼀起，若不是则把j项赋值为空（值为0） */
 					{
 						BOX[i][j] = 0;
-						//if_need_add_num = 1;
+						flag = 1;
 					}
 				}
 			}
@@ -511,13 +524,13 @@ void right()
 				{
 					score += BOX[i][k--] <<= 1;
 					BOX[i][j] = 0;
-
+					flag = 1;
 				}
 				else if (BOX[i][k] == 0)
 				{
 					BOX[i][k] = BOX[i][j];
 					BOX[i][j] = 0;
-
+					flag = 1;
 				}
 				else
 				{
@@ -525,7 +538,7 @@ void right()
 					if (j != k)
 					{
 						BOX[i][j] = 0;
-
+						flag = 1;
 					}
 				}
 			}
@@ -546,13 +559,13 @@ void up() {
 					{
 						score += BOX[k++][i] <<= 1;
 						BOX[j][i] = 0;
-						//if_need_add_num = 1;
+						flag = 1;
 					}
 					else if (BOX[k][i] == 0)
 					{
 						BOX[k][i] = BOX[j][i];
 						BOX[j][i] = 0;
-						//if_need_add_num = 1;
+						flag = 1;
 					}
 					else
 					{
@@ -560,7 +573,7 @@ void up() {
 						if (j != k)
 						{
 							BOX[j][i] = 0;
-							//if_need_add_num = 1;
+							flag = 1;
 						}
 					}
 				}
@@ -582,13 +595,13 @@ void down()
 				{
 					score += BOX[k--][i] <<= 1;
 					BOX[j][i] = 0;
-					//if_need_add_num = 1;
+					flag = 1;
 				}
 				else if (BOX[k][i] == 0)
 				{
 					BOX[k][i] = BOX[j][i];
 					BOX[j][i] = 0;
-					//if_need_add_num = 1;
+					flag = 1;
 				}
 				else
 				{
@@ -596,7 +609,7 @@ void down()
 					if (j != k)
 					{
 						BOX[j][i] = 0;
-						//if_need_add_num = 1;
+						flag = 1;
 					}
 				}
 			}
@@ -612,8 +625,91 @@ void ClearBox() {
 	}
 	count = 0, score = 0, start = 0;
 }
+
+int Max() {//遍历数组，查找最大值
+	int i, j, max = 0;
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 4; j++)
+			if (BOX[i][j] > max)
+				max = BOX[i][j];
+	}
+	return max;
+}
+
+void Final() {
+	COORD pos_1 = { 58,18 };
+	SetConsoleCursorPosition(hOut, pos_1);
+	SetConsoleTextAttribute(hOut, BRIGHT_RED);
+	printf("我要重新玩一局-------1   不玩了，退出吧！-------2/Esc");
+
+	ClearBox();
+	Game_Start();
+}
+
+void PrtWin() {
+	COORD pos_1 = { 56,6 };
+	COORD pos_2 = { 56,7 };
+	COORD pos_3 = { 56,8 };
+	COORD pos_4 = { 56,9 };
+	COORD pos_5 = { 56,10 };
+	COORD pos_6 = { 56,11 };
+	COORD pos_7 = { 56,12 };
+
+	COORD pos_8 = { 66,14 };
+
+	SetConsoleTextAttribute(hOut, GREEN);
+	SetConsoleCursorPosition(hOut, pos_1);
+	printf("■           ■           ■ ■■■■■ ■          ■");
+	SetConsoleCursorPosition(hOut, pos_2);
+	printf(" ■         ■ ■        ■      ■     ■■        ■");
+	SetConsoleCursorPosition(hOut, pos_3);
+	printf("  ■       ■   ■      ■       ■     ■  ■      ■");
+	SetConsoleCursorPosition(hOut, pos_4);
+	printf("   ■     ■     ■    ■        ■     ■    ■    ■");
+	SetConsoleCursorPosition(hOut, pos_5);
+	printf("    ■   ■       ■  ■         ■     ■      ■  ■");
+	SetConsoleCursorPosition(hOut, pos_6);
+	printf("     ■ ■         ■■          ■     ■        ■■");
+	SetConsoleCursorPosition(hOut, pos_7);
+	printf("      ■            ■       ■■■■■ ■          ■");
+	SetConsoleCursorPosition(hOut, pos_8);
+	SetConsoleTextAttribute(hOut, BRIGHT_MAGENTA);
+	printf("胜利啦，你真棒！！！");
+	Final();
+}
+
+void GameWin() {
+
+	while (1) {
+
+		PrtWin();
+		getch();
+	}
+}
+void GameOver() {
+	while (1) {
+		printf("over");
+		getch();
+	}
+}
+
+int Check_Over() {
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			if (BOX[i][j] == BOX[i][j + 1] || BOX[j][i] == BOX[j + 1][i])
+			{
+				return 0;
+			}
+		}
+	}
+	return 1;
+}
+
 void Game_Start() {
-	int i, j;
+	int i, j, max;
 	time_t time_start, time_now;
 	char c, a;
 
@@ -632,6 +728,9 @@ void Game_Start() {
 		SetConsoleCursorPosition(hOut, pos_1);
 		printf("游戏分数: %ld", score);
 
+		if (flag == 0)
+			count--;
+
 		SetConsoleTextAttribute(hOut, BRIGHT_MAGENTA);
 		SetConsoleCursorPosition(hOut, pos_2);
 		printf("执行步数: %ld", count);
@@ -639,9 +738,10 @@ void Game_Start() {
 		SetConsoleTextAttribute(hOut, GREEN);
 		SetConsoleCursorPosition(hOut, pos_24);
 		printf("已用时： %ld", start);
-
-		random();
-
+		if (Count() != 16 && flag == 1) {
+			random();
+			flag = 0;
+		}
 		for (i = 0; i < 4; i++) {
 			for (j = 0; j < 4; j++)
 				PrtNumC(BOX[i][j], i, j);
@@ -654,6 +754,14 @@ void Game_Start() {
 		time_now = time(NULL);
 		start = time_now - time_start;
 
+
+		if (Max() == 64) {
+			GameWin();
+		}
+		else if (Check_Over()) {
+			if (Count() == 16)
+				GameOver();
+		}
 		while (1) {
 			c = getch();
 			if (c == 27) {
@@ -703,12 +811,12 @@ void Game_Start() {
 int main() {
 	fflush(stdin);
 	SetConsoleTitle("2 0 4 8 游 戏");
-	int flag = 0;
+	int sym = 0;
 	//HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	PrtTitle();             //打印2048
 	printf("\n\n");
 	while (1) {
-		char c = PrtWelcom(flag);     //打印主界面，返回值为键盘输入
+		char c = PrtWelcom(sym);     //打印主界面，返回值为键盘输入
 		if (c == 27 || c == '4')                       //ESC
 			exit(0);
 
@@ -719,7 +827,7 @@ int main() {
 		else if (c == '3')
 			Rules();
 		else {
-			flag = 1;
+			sym = 1;
 
 		}
 	}
