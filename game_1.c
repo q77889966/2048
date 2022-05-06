@@ -1,7 +1,8 @@
-﻿#include<stdio.h>
-#include<windows.h>
+﻿#include <stdio.h>
+#include <windows.h>
 #include <conio.h>
-#include<time.h>
+#include <time.h>
+#include <stdlib.h>
 #define	GREEN	FOREGROUND_GREEN	//2 前景深绿 0x02
 #define	CYAN		FOREGROUND_GREEN|FOREGROUND_BLUE	//3 前景青
 #define	RED		FOREGROUND_RED	//4 前景红
@@ -17,6 +18,10 @@
 #define	BRIGHT_WHITE FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE //15 前景亮白
 
 #define hOut GetStdHandle(STD_OUTPUT_HANDLE)
+
+int BOX[4][4] = { {0},{0},{0},{0} };//游戏棋盘状态数组
+long int count = 0, score = 0, start = 0;//已执行步数 存储游戏分数 游戏开始时间
+
 void Hidecursor()
 {
 	CONSOLE_CURSOR_INFO CURSOR_INFO = { 1,0 };
@@ -126,8 +131,6 @@ void Keys() {                 //打印按键说明
 	system("cls");
 	main();
 }
-
-
 
 void Rules() {                //打印游戏规则
 	system("cls");
@@ -290,20 +293,150 @@ void PrtGameBox() {                 //打印4 * 4游戏棋盘框线以及游戏�
 	printf("-----------------------------------------");
 }
 
+void PrtNumC(int num, int x, int y) {//打印数字
+	COORD num_00 = { 18,6 };
+	COORD num_01 = { 28,6 };
+	COORD num_02 = { 38,6 };
+	COORD num_03 = { 48,6 };
+	COORD num_10 = { 18,11 };
+	COORD num_11 = { 28,11 };
+	COORD num_12 = { 38,11 };
+	COORD num_13 = { 48,11 };
+	COORD num_20 = { 18,16 };
+	COORD num_21 = { 28,16 };
+	COORD num_22 = { 38,16 };
+	COORD num_23 = { 48,16 };
+	COORD num_30 = { 18,21 };
+	COORD num_31 = { 28,21 };
+	COORD num_32 = { 38,21 };
+	COORD num_33 = { 48,21 };
+	switch (num) {
+	case 2:
+		SetConsoleTextAttribute(hOut, BRIGHT_RED);
+		break;
+	case 4:
+		SetConsoleTextAttribute(hOut, BRIGHT_CYAN);
+		break;
+	case 8:
+		SetConsoleTextAttribute(hOut, BRIGHT_GREEN);
+		break;
+	case 16:
+		SetConsoleTextAttribute(hOut, BRIGHT_YELLOW);
+		break;
+	case 32:
+		SetConsoleTextAttribute(hOut, YELLOW);
+		break;
+	case 64:
+		SetConsoleTextAttribute(hOut, GREEN);
+		break;
+	case 128:
+		SetConsoleTextAttribute(hOut, RED);
+		break;
+	case 256:
+		SetConsoleTextAttribute(hOut, CYAN);
+		break;
+	case 512:
+		SetConsoleTextAttribute(hOut, GREEN);
+		break;
+	case 1024:
+		SetConsoleTextAttribute(hOut, BRIGHT_BLUE);
+		break;
+	case 2048:
+		SetConsoleTextAttribute(hOut, WHITE);
+		break;
+	}
+	switch (x) {
+	case 0:
+		switch (y) {
+		case 0:
+			SetConsoleCursorPosition(hOut, num_00);
+			break;
+		case 1:
+			SetConsoleCursorPosition(hOut, num_01);
+			break;
+		case 2:
+			SetConsoleCursorPosition(hOut, num_02);
+			break;
+		case 3:
+			SetConsoleCursorPosition(hOut, num_03);
+			break;
+		}
+		break;
+	case 1:
+		switch (y) {
+		case 0:
+			SetConsoleCursorPosition(hOut, num_10);
+			break;
+		case 1:
+			SetConsoleCursorPosition(hOut, num_11);
+			break;
+		case 2:
+			SetConsoleCursorPosition(hOut, num_12);
+			break;
+		case 3:
+			SetConsoleCursorPosition(hOut, num_13);
+			break;
+		}
+		break;
+	case 2:
+		switch (y) {
+		case 0:
+			SetConsoleCursorPosition(hOut, num_20);
+			break;
+		case 1:
+			SetConsoleCursorPosition(hOut, num_21);
+			break;
+		case 2:
+			SetConsoleCursorPosition(hOut, num_22);
+			break;
+		case 3:
+			SetConsoleCursorPosition(hOut, num_23);
+			break;
+		}
+		break;
+	case 3:
+		switch (y) {
+		case 0:
+			SetConsoleCursorPosition(hOut, num_30);
+			break;
+		case 1:
+			SetConsoleCursorPosition(hOut, num_31);
+			break;
+		case 2:
+			SetConsoleCursorPosition(hOut, num_32);
+			break;
+		case 3:
+			SetConsoleCursorPosition(hOut, num_33);
+			break;
+		}
+		break;
+	}
+	if (BOX[x][y] == 0)
+		printf("    ");
+	else
+		printf("%d", BOX[x][y]);
+}
+
+void random() {          //随机数生成并打印
+	int i, j;
+	if
+}
+
 void Game_Start() {
-	long int count = 0, score = 0, start = 0;//已执行步数 存储游戏分数 游戏开始时间
+	int i, j;
 	time_t time_start, time_now;
-	char c;
-	int BOX[4][4] = { {0},{0},{0},{0} };//游戏棋盘状态数组
+	char c, a;
+
 	system("cls");
+
+	srand((unsigned)time(NULL));
+
 
 	COORD pos_1 = { 14,2 };
 	COORD pos_2 = { 40,2 };
 	COORD pos_24 = { 40,24 };
-
+	COORD pos_25 = { 16,24 };
 	PrtGameBox();
-
-	//HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	time_start = time(NULL);
 
@@ -320,7 +453,12 @@ void Game_Start() {
 		SetConsoleCursorPosition(hOut, pos_24);
 		printf("已用时： %ld", start);
 
-		count++;
+
+
+		for (i = 0; i < 4; i++) {
+			for (j = 0; j < 4; j++)
+				PrtNumC(BOX[i][j], i, j);
+		}
 
 		Hidecursor();
 		fflush(stdin);
@@ -331,10 +469,41 @@ void Game_Start() {
 
 		while (1) {
 			c = getch();
-			if (c == 80) {
+			if (c == 27) {
+				SetConsoleTextAttribute(hOut, RED);
+				SetConsoleCursorPosition(hOut, pos_25);
+				printf("确定退出游戏吗? (Y/N)");
+				while (1) {
+					a = getch();
+					if (a == 'y' || a == 'Y') {
+						system("cls");
+						main();
+						break;
+					}
+					else if (a == 'n' || a == 'N') {
+						SetConsoleCursorPosition(hOut, pos_25);
+						printf("                      ");
+						Hidecursor();
+						fflush(stdin);
+						break;
+					}
+				}
+
+			}
+			else if (c == 80) {//下
+
+			}
+			else if (c == 72) {//上
+
+			}
+			else if (c == 75) {//左
+
+			}
+			else if (c == 77) {//右
 
 			}
 		}
+		count++;
 	}
 	//printf("111");
 }
