@@ -643,7 +643,6 @@ void Final() {
 	printf("我要重新玩一局-------1   不玩了，退出吧！-------2/Esc");
 
 	ClearBox();
-	Game_Start();
 }
 
 void PrtWin() {
@@ -675,17 +674,10 @@ void PrtWin() {
 	SetConsoleCursorPosition(hOut, pos_8);
 	SetConsoleTextAttribute(hOut, BRIGHT_MAGENTA);
 	printf("胜利啦，你真棒！！！");
-	Final();
+
 }
 
-void GameWin() {
 
-	while (1) {
-
-		PrtWin();
-		getch();
-	}
-}
 void GameOver() {
 	while (1) {
 		printf("over");
@@ -707,6 +699,8 @@ int Check_Over() {
 	}
 	return 1;
 }
+
+
 
 void Game_Start() {
 	int i, j, max;
@@ -756,7 +750,9 @@ void Game_Start() {
 
 
 		if (Max() == 64) {
-			GameWin();
+			PrtWin();
+			Final();
+			Game_Start();
 		}
 		else if (Check_Over()) {
 			if (Count() == 16)
