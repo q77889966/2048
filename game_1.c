@@ -350,14 +350,22 @@ void PrtNumC(int num, int x, int y) {//打印数字
 		switch (y) {
 		case 0:
 			SetConsoleCursorPosition(hOut, num_00);
+			printf("    ");
+			SetConsoleCursorPosition(hOut, num_00);
 			break;
 		case 1:
+			SetConsoleCursorPosition(hOut, num_01);
+			printf("    ");
 			SetConsoleCursorPosition(hOut, num_01);
 			break;
 		case 2:
 			SetConsoleCursorPosition(hOut, num_02);
+			printf("    ");
+			SetConsoleCursorPosition(hOut, num_02);
 			break;
 		case 3:
+			SetConsoleCursorPosition(hOut, num_03);
+			printf("    ");
 			SetConsoleCursorPosition(hOut, num_03);
 			break;
 		}
@@ -366,14 +374,22 @@ void PrtNumC(int num, int x, int y) {//打印数字
 		switch (y) {
 		case 0:
 			SetConsoleCursorPosition(hOut, num_10);
+			printf("    ");
+			SetConsoleCursorPosition(hOut, num_10);
 			break;
 		case 1:
+			SetConsoleCursorPosition(hOut, num_11);
+			printf("    ");
 			SetConsoleCursorPosition(hOut, num_11);
 			break;
 		case 2:
 			SetConsoleCursorPosition(hOut, num_12);
+			printf("    ");
+			SetConsoleCursorPosition(hOut, num_12);
 			break;
 		case 3:
+			SetConsoleCursorPosition(hOut, num_13);
+			printf("    ");
 			SetConsoleCursorPosition(hOut, num_13);
 			break;
 		}
@@ -382,14 +398,22 @@ void PrtNumC(int num, int x, int y) {//打印数字
 		switch (y) {
 		case 0:
 			SetConsoleCursorPosition(hOut, num_20);
+			printf("    ");
+			SetConsoleCursorPosition(hOut, num_20);
 			break;
 		case 1:
+			SetConsoleCursorPosition(hOut, num_21);
+			printf("    ");
 			SetConsoleCursorPosition(hOut, num_21);
 			break;
 		case 2:
 			SetConsoleCursorPosition(hOut, num_22);
+			printf("    ");
+			SetConsoleCursorPosition(hOut, num_22);
 			break;
 		case 3:
+			SetConsoleCursorPosition(hOut, num_23);
+			printf("    ");
 			SetConsoleCursorPosition(hOut, num_23);
 			break;
 		}
@@ -398,14 +422,22 @@ void PrtNumC(int num, int x, int y) {//打印数字
 		switch (y) {
 		case 0:
 			SetConsoleCursorPosition(hOut, num_30);
+			printf("    ");
+			SetConsoleCursorPosition(hOut, num_30);
 			break;
 		case 1:
+			SetConsoleCursorPosition(hOut, num_31);
+			printf("    ");
 			SetConsoleCursorPosition(hOut, num_31);
 			break;
 		case 2:
 			SetConsoleCursorPosition(hOut, num_32);
+			printf("    ");
+			SetConsoleCursorPosition(hOut, num_32);
 			break;
 		case 3:
+			SetConsoleCursorPosition(hOut, num_33);
+			printf("    ");
 			SetConsoleCursorPosition(hOut, num_33);
 			break;
 		}
@@ -413,24 +445,179 @@ void PrtNumC(int num, int x, int y) {//打印数字
 	}
 	if (BOX[x][y] == 0)
 		printf("    ");
-	else
+	else {
 		printf("%d", BOX[x][y]);
+	}
 }
 
-void random() {          //随机数生成并打印
+void random() {          //随机数生成
+	srand((unsigned)time(NULL));
+	int i, j, num;
+	int a[2] = { 2,4 };
+	while (1) {
+		i = rand() % 4;
+		j = rand() % 4;
+		num = rand() % 2;
+		if (BOX[i][j] == 0) {
+			BOX[i][j] = a[num];
+			break;
+		}
+	}
+}
+
+void left()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 1, k = 0; j < 4; j++)
+		{
+			if (BOX[i][j] > 0) /* 找出k后⾯第⼀个不为空的项，下标为j，之后分三种情况 */
+			{
+				if (BOX[i][k] == BOX[i][j]) /* 情况1：k项和j项相等，此时合并⽅块并计分 */
+				{
+					score += BOX[i][k++] <<= 1;
+					BOX[i][j] = 0;
+					//if_need_add_num = 1; /* 需要⽣成随机数和刷新界⾯ */
+				}
+				else if (BOX[i][k] == 0) /* 情况2：k项为空，则把j项赋值给k项，相当于j⽅块移动到k⽅块 */
+				{
+					BOX[i][k] = BOX[i][j];
+					BOX[i][j] = 0;
+					//if_need_add_num = 1;
+				}
+				else /* 情况3：k项不为空，且和j项不相等，此时把j项赋值给k+1项，相当于移动到k+1的位置 */
+				{
+					BOX[i][++k] = BOX[i][j];
+					if (j != k) /* 判断j项和k项是否原先就挨在⼀起，若不是则把j项赋值为空（值为0） */
+					{
+						BOX[i][j] = 0;
+						//if_need_add_num = 1;
+					}
+				}
+			}
+		}
+	}
+}
+
+void right()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 2, k = 3; j >= 0; j--)
+		{
+			if (BOX[i][j] > 0)
+			{
+				if (BOX[i][k] == BOX[i][j])
+				{
+					score += BOX[i][k--] <<= 1;
+					BOX[i][j] = 0;
+
+				}
+				else if (BOX[i][k] == 0)
+				{
+					BOX[i][k] = BOX[i][j];
+					BOX[i][j] = 0;
+
+				}
+				else
+				{
+					BOX[i][--k] = BOX[i][j];
+					if (j != k)
+					{
+						BOX[i][j] = 0;
+
+					}
+				}
+			}
+		}
+	}
+}
+
+void up() {
+	/* 仿照左移操作，区别仅仅是⾏列互换后遍历 */
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 1, k = 0; j < 4; j++)
+		{
+			if (BOX[j][i] > 0)
+			{
+				{
+					if (BOX[k][i] == BOX[j][i])
+					{
+						score += BOX[k++][i] <<= 1;
+						BOX[j][i] = 0;
+						//if_need_add_num = 1;
+					}
+					else if (BOX[k][i] == 0)
+					{
+						BOX[k][i] = BOX[j][i];
+						BOX[j][i] = 0;
+						//if_need_add_num = 1;
+					}
+					else
+					{
+						BOX[++k][i] = BOX[j][i];
+						if (j != k)
+						{
+							BOX[j][i] = 0;
+							//if_need_add_num = 1;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void down()
+{
+	/* 仿照左移操作，区别仅仅是⾏列互换后遍历，且j和k都反向遍历 */
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 2, k = 3; j >= 0; j--)
+		{
+			if (BOX[j][i] > 0)
+			{
+				if (BOX[k][i] == BOX[j][i])
+				{
+					score += BOX[k--][i] <<= 1;
+					BOX[j][i] = 0;
+					//if_need_add_num = 1;
+				}
+				else if (BOX[k][i] == 0)
+				{
+					BOX[k][i] = BOX[j][i];
+					BOX[j][i] = 0;
+					//if_need_add_num = 1;
+				}
+				else
+				{
+					BOX[--k][i] = BOX[j][i];
+					if (j != k)
+					{
+						BOX[j][i] = 0;
+						//if_need_add_num = 1;
+					}
+				}
+			}
+		}
+	}
+}
+
+void ClearBox() {
 	int i, j;
-	if
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 4; j++)
+			BOX[i][j] = 0;
+	}
+	count = 0, score = 0, start = 0;
 }
-
 void Game_Start() {
 	int i, j;
 	time_t time_start, time_now;
 	char c, a;
 
 	system("cls");
-
-	srand((unsigned)time(NULL));
-
 
 	COORD pos_1 = { 14,2 };
 	COORD pos_2 = { 40,2 };
@@ -453,7 +640,7 @@ void Game_Start() {
 		SetConsoleCursorPosition(hOut, pos_24);
 		printf("已用时： %ld", start);
 
-
+		random();
 
 		for (i = 0; i < 4; i++) {
 			for (j = 0; j < 4; j++)
@@ -477,6 +664,7 @@ void Game_Start() {
 					a = getch();
 					if (a == 'y' || a == 'Y') {
 						system("cls");
+						ClearBox();
 						main();
 						break;
 					}
@@ -491,16 +679,20 @@ void Game_Start() {
 
 			}
 			else if (c == 80) {//下
-
+				down();
+				break;
 			}
 			else if (c == 72) {//上
-
+				up();
+				break;
 			}
 			else if (c == 75) {//左
-
+				left();
+				break;
 			}
 			else if (c == 77) {//右
-
+				right();
+				break;
 			}
 		}
 		count++;
