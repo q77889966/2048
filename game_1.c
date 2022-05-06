@@ -16,6 +16,7 @@
 #define	BRIGHT_YELLOW		FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN	//14 前景亮黄
 #define	BRIGHT_WHITE FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE //15 前景亮白
 
+#define hOut GetStdHandle(STD_OUTPUT_HANDLE)
 void Hidecursor()
 {
 	CONSOLE_CURSOR_INFO CURSOR_INFO = { 1,0 };
@@ -28,7 +29,6 @@ void PrtTitle() {                    //打印2048
 	COORD pos_2 = { 17,4 };
 	COORD pos_3 = { 17,5 };
 	COORD pos_4 = { 17,6 };
-	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hOut, pos);
 	SetConsoleTextAttribute(hOut, BRIGHT_CYAN);
 	printf("■■■   ■■■■   ■  ■     ■■■■");
@@ -63,7 +63,6 @@ char PrtWelcom(int flag) {
 	COORD final_1 = { 37,22 };
 	COORD final_2 = { 47,22 };
 
-	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hOut, pos_1);
 	SetConsoleTextAttribute(hOut, BRIGHT_YELLOW);
 	printf("==============================================");
@@ -116,7 +115,6 @@ void Keys() {                 //打印按键说明
 
 	COORD pos_1 = { 19,22 };
 	COORD pos_2 = { 19,24 };
-	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hOut, BRIGHT_MAGENTA);
 	SetConsoleCursorPosition(hOut, pos_1);
 	printf("（1）↑、↓、←、→方向键进行游戏操作！");
@@ -158,7 +156,7 @@ void Rules() {                //打印游戏规则
 	COORD pos_19 = { 15,14 };
 	COORD pos_20 = { 15,16 };
 
-	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	//HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hOut, BRIGHT_MAGENTA);
 	SetConsoleCursorPosition(hOut, pos_1);
 	printf("游戏规则");
@@ -245,7 +243,7 @@ void PrtGameBox() {                 //打印4 * 4游戏棋盘框线以及游戏�
 	COORD pos_22 = { 13,22 };
 	COORD pos_23 = { 13,23 };
 
-	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	//HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	SetConsoleTextAttribute(hOut, BRIGHT_YELLOW);
 	SetConsoleCursorPosition(hOut, pos_3);
@@ -305,7 +303,7 @@ void Game_Start() {
 
 	PrtGameBox();
 
-	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	//HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	time_start = time(NULL);
 
@@ -345,7 +343,7 @@ int main() {
 	fflush(stdin);
 	SetConsoleTitle("2 0 4 8 游 戏");
 	int flag = 0;
-	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	//HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	PrtTitle();             //打印2048
 	printf("\n\n");
 	while (1) {
