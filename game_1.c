@@ -23,9 +23,13 @@
 int BOX[4][4] = { {0},{0},{0},{0} };//游戏棋盘状态数组
 long int count = 0, score = 0, start = 0;//已执行步数 存储游戏分数 游戏开始时间
 bool flag = 1;
-void Hidecursor()
-{
+void Hidecursor() {
 	CONSOLE_CURSOR_INFO CURSOR_INFO = { 1,0 };
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &CURSOR_INFO);
+}
+
+void CancelHide() {
+	CONSOLE_CURSOR_INFO CURSOR_INFO = { 1,1 };
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &CURSOR_INFO);
 }
 
@@ -623,7 +627,7 @@ void ClearBox() {
 		for (j = 0; j < 4; j++)
 			BOX[i][j] = 0;
 	}
-	count = 0, score = 0, start = 0;
+	count = 0, score = 0, start = 0, flag = 1;
 }
 
 int Max() {//遍历数组，查找最大值
@@ -636,13 +640,25 @@ int Max() {//遍历数组，查找最大值
 	return max;
 }
 
-void Final() {
-	COORD pos_1 = { 58,18 };
+char Final() {
+	int c;
+	COORD pos_1 = { 58,19 };
+	COORD pos_2 = { 58,21 };
 	SetConsoleCursorPosition(hOut, pos_1);
 	SetConsoleTextAttribute(hOut, BRIGHT_RED);
 	printf("我要重新玩一局-------1   不玩了，退出吧！-------2/Esc");
-
+	CancelHide();
+	SetConsoleCursorPosition(hOut, pos_2);
+	printf("请选择[1 2]：");
+	while (1) {
+		c = getch();
+		if (c == '1' || c == '2' || c == 27)
+			break;
+	}
 	ClearBox();
+	system("cls");
+	Hidecursor();
+	return c;
 }
 
 void PrtWin() {
@@ -677,12 +693,53 @@ void PrtWin() {
 
 }
 
+void PrtEnd() {
+	COORD pos_1 = { 63,6 };
+	COORD pos_2 = { 63,7 };
+	COORD pos_3 = { 63,8 };
+	COORD pos_4 = { 63,9 };
+	COORD pos_5 = { 63,10 };
+	COORD pos_6 = { 63,11 };
+	COORD pos_7 = { 63,12 };
+	COORD pos_8 = { 63,13 };
+	COORD pos_9 = { 63,14 };
 
-void GameOver() {
-	while (1) {
-		printf("over");
-		getch();
-	}
+	COORD pos_10 = { 70,16 };
+
+	COORD pos_11 = { 70,3 };
+	COORD pos_12 = { 88,3 };
+
+	SetConsoleCursorPosition(hOut, pos_11);
+	SetConsoleTextAttribute(hOut, BRIGHT_YELLOW);
+	printf("合并出的最大数：");
+
+	SetConsoleCursorPosition(hOut, pos_12);
+	SetConsoleTextAttribute(hOut, BRIGHT_CYAN);
+	printf("%d", Max());
+
+	SetConsoleTextAttribute(hOut, RED);
+	SetConsoleCursorPosition(hOut, pos_1);
+	printf("■■■■■    ■         ■    ■■");
+	SetConsoleCursorPosition(hOut, pos_2);
+	printf("■            ■■       ■    ■  ■");
+	SetConsoleCursorPosition(hOut, pos_3);
+	printf("■            ■ ■      ■    ■    ■");
+	SetConsoleCursorPosition(hOut, pos_4);
+	printf("■            ■  ■     ■    ■     ■");
+	SetConsoleCursorPosition(hOut, pos_5);
+	printf("■■■■      ■   ■    ■    ■      ■");
+	SetConsoleCursorPosition(hOut, pos_6);
+	printf("■            ■    ■   ■    ■     ■");
+	SetConsoleCursorPosition(hOut, pos_7);
+	printf("■            ■     ■  ■    ■    ■");
+	SetConsoleCursorPosition(hOut, pos_8);
+	printf("■            ■      ■ ■    ■  ■");
+	SetConsoleCursorPosition(hOut, pos_9);
+	printf("■■■■■    ■       ■■    ■■");
+
+	SetConsoleCursorPosition(hOut, pos_10);
+	SetConsoleTextAttribute(hOut, BRIGHT_MAGENTA);
+	printf("无法移动，游戏失败！");
 }
 
 int Check_Over() {
@@ -705,7 +762,7 @@ int Check_Over() {
 void Game_Start() {
 	int i, j, max;
 	time_t time_start, time_now;
-	char c, a;
+	char c, a, b;//检测键盘输入
 
 	system("cls");
 
@@ -749,14 +806,26 @@ void Game_Start() {
 		start = time_now - time_start;
 
 
-		if (Max() == 64) {
+		if (Max() == 2048) {             //获胜条件
 			PrtWin();
-			Final();
-			Game_Start();
+			b = Final();
+			if (b == '1')
+				Game_Start();
+			else if (b == '2' || b == 27) {
+				main();
+			}
+
 		}
 		else if (Check_Over()) {
-			if (Count() == 16)
-				GameOver();
+			if (Count() == 16) {
+				PrtEnd();
+				b = Final();
+				if (b == '1')
+					Game_Start();
+				else if (b == '2' || b == 27) {
+					main();
+				}
+			}
 		}
 		while (1) {
 			c = getch();
