@@ -107,6 +107,7 @@ char PrtWelcom(int sym) {
 	SetConsoleCursorPosition(hOut, final);
 	SetConsoleTextAttribute(hOut, CYAN);
 
+	CancelHide();
 	if (sym == 0) {
 		printf("请选择[1 2 3 4]:[ ]");
 		SetConsoleCursorPosition(hOut, final_1);
