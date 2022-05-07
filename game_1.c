@@ -663,6 +663,7 @@ char Final() {
 }
 
 void PrtWin() {
+	system("mode con cols=90 lines=80");
 	COORD pos_1 = { 56,6 };
 	COORD pos_2 = { 56,7 };
 	COORD pos_3 = { 56,8 };
@@ -695,6 +696,7 @@ void PrtWin() {
 }
 
 void PrtEnd() {
+
 	COORD pos_1 = { 63,6 };
 	COORD pos_2 = { 63,7 };
 	COORD pos_3 = { 63,8 };
@@ -761,6 +763,7 @@ int Check_Over() {
 
 
 void Game_Start() {
+	system("mode con cols=150 lines=40");
 	int i, j, max;
 	time_t time_start, time_now;
 	char c, a, b;//检测键盘输入
@@ -875,6 +878,7 @@ void Game_Start() {
 }
 
 int main() {
+	system("mode con cols=80 lines=30");
 	fflush(stdin);
 	SetConsoleTitle("2 0 4 8 游 戏");
 	int sym = 0;
