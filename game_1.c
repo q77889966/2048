@@ -886,7 +886,7 @@ int main() {
 	SetConsoleTitle("2 0 4 8 游 戏");
 	int sym = 0;
 	//HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	PrtTitle();             //打印2048
+	PrtTitle();                 //打印2048
 	printf("\n\n");
 	while (1) {
 		char c = PrtWelcom(sym);     //打印主界面，返回值为键盘输入
