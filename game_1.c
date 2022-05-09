@@ -229,7 +229,7 @@ void Rules() {                //打印游戏规则
 	main();
 }
 
-void PrtGameBox() {                 //打印4 * 4游戏棋盘框线以及游戏固定信息
+void PrtGameBox() {                 //打印4 * 4游戏棋盘框线
 	COORD pos_3 = { 13,3 };
 	COORD pos_4 = { 13,4 };
 	COORD pos_5 = { 13,5 };
@@ -489,24 +489,24 @@ void left()
 	{
 		for (int j = 1, k = 0; j < 4; j++)
 		{
-			if (BOX[i][j] > 0) /* 找出k后⾯第⼀个不为空的项，下标为j，之后分三种情况 */
+			if (BOX[i][j] > 0)
 			{
-				if (BOX[i][k] == BOX[i][j]) /* 情况1：k项和j项相等，此时合并⽅块并计分 */
+				if (BOX[i][k] == BOX[i][j])
 				{
 					score += BOX[i][k++] <<= 1;
 					BOX[i][j] = 0;
-					flag = 1; /* 需要⽣成随机数和刷新界⾯ */
+					flag = 1;
 				}
-				else if (BOX[i][k] == 0) /* 情况2：k项为空，则把j项赋值给k项，相当于j⽅块移动到k⽅块 */
+				else if (BOX[i][k] == 0)
 				{
 					BOX[i][k] = BOX[i][j];
 					BOX[i][j] = 0;
 					flag = 1;
 				}
-				else /* 情况3：k项不为空，且和j项不相等，此时把j项赋值给k+1项，相当于移动到k+1的位置 */
+				else
 				{
 					BOX[i][++k] = BOX[i][j];
-					if (j != k) /* 判断j项和k项是否原先就挨在⼀起，若不是则把j项赋值为空（值为0） */
+					if (j != k)
 					{
 						BOX[i][j] = 0;
 						flag = 1;
@@ -663,7 +663,7 @@ char Final() {
 }
 
 void PrtWin() {
-	system("mode con cols=90 lines=80");
+
 	COORD pos_1 = { 56,6 };
 	COORD pos_2 = { 56,7 };
 	COORD pos_3 = { 56,8 };
@@ -763,7 +763,9 @@ int Check_Over() {
 
 
 void Game_Start() {
+
 	system("mode con cols=150 lines=40");
+
 	int i, j, max;
 	time_t time_start, time_now;
 	char c, a, b;//检测键盘输入
@@ -793,6 +795,7 @@ void Game_Start() {
 		SetConsoleTextAttribute(hOut, GREEN);
 		SetConsoleCursorPosition(hOut, pos_24);
 		printf("已用时： %ld", start);
+
 		if (Count() != 16 && flag == 1) {
 			random();
 			flag = 0;
